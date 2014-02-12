@@ -31,7 +31,7 @@ class ioncubeloader (
         notify  => Exec['unpack-ioncubeloader'];
 
       'unpack-ioncubeloader':
-        command     => "tar -C ${ioncubeloader::params::basedir} -xf ${ioncubeloader::params::destdir}",
+        command     => "tar -C ${ioncubeloader::params::basedir} -xf ${ioncubeloader::params::destdir}/ioncube_loaders_lin_${arch}.tar.bz2",
         creates     => "${ioncubeloader::params::destdir}/README.txt",
         refreshonly => true;
     }
