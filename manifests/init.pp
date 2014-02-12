@@ -11,9 +11,10 @@
 # Sample Usage:
 #
 class ioncubeloader (
-  $ensure  = 'present',
-  $phpvers = '5.4',
-  $inifile = '/etc/php5/conf.d/ioncube.ini') inherits ioncubeloader::params {
+  $ensure          = 'present',
+  $phpvers         = '5.4',
+  $inifile         = '/etc/php5/conf.d/ioncube.ini',
+  $restart_service = false) inherits ioncubeloader::params {
   if $ensure == 'present' {
     file { $ioncubeloader::params::destdir: ensure => 'directory' }
 
@@ -45,6 +46,14 @@ class ioncubeloader (
       }
       ,
       require  => Exec['unpack-ioncubeloader'],
+    }
+
+    if $restart_service {
+      exec { "service ${restart_service} restart":
+        refreshonly => true,
+        require     => Php::Config['ioncubeloader'],
+        subscribe   => Exec['unpack-ioncubeloader'],
+      }
     }
   } elsif $ensure == 'absent' {
     file {
