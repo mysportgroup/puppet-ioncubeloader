@@ -13,7 +13,7 @@
 class ioncubeloader (
   $ensure          = 'present',
   $phpvers         = '5.4',
-  $inifile         = '/etc/php5/conf.d/ioncube.ini',
+  $inifile         = '/etc/php5/conf.d/00-ioncube.ini',
   $restart_service = false) inherits ioncubeloader::params {
   if $ensure == 'present' {
     file { $ioncubeloader::params::destdir: ensure => 'directory' }
@@ -55,6 +55,9 @@ class ioncubeloader (
         subscribe   => Exec['unpack-ioncubeloader'],
       }
     }
+
+    file { '/etc/php5/conf.d/ioncube.ini': ensure => 'absent'; }
+
   } elsif $ensure == 'absent' {
     file {
       $inifile:
